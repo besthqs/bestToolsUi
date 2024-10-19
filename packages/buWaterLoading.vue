@@ -2,19 +2,23 @@
   <div class="myfullscreen">
     <div class="myLoading" :style="{ '--top': mytop }">
       <div class="loadingText bfb">
-        {{ position ? position.toFixed(1) + "%" : "加载中..." }}
+        {{ ((position * 100) / max).toFixed(1) + "%" }}
       </div>
 
       <div class="loadingText myprogress" v-if="position">
-        <progress max="100" :value="position"></progress>
+        <progress :max="max" :value="position"></progress>
       </div>
-      <div class="loadingText seconds">{{ seconds }}</div>
+      <div class="loadingText seconds">{{ content }}</div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
-const props = defineProps<{ position: number; seconds: string }>();
+const props = withDefaults(
+  defineProps<{ position: number; max?: number; content?: string }>(),
+
+  { max: 100 }
+);
 const mytop = computed(() => 100 - props.position + "%");
 </script>
 <style scoped>
